@@ -7,7 +7,7 @@ function App() {
   // Ferme la navbar après 10 s d'ouverture
   useEffect(() => {
     if (isNavOpen) {
-      const timer = setTimeout(() => setIsNavOpen(false), 10000)
+      const timer = setTimeout(() => setIsNavOpen(false), 50000)
       return () => clearTimeout(timer)
     }
   }, [isNavOpen])
@@ -36,7 +36,7 @@ function App() {
             </nav>
           </div>
         )}
-        <div className="header">
+        <div className={`header ${isNavOpen ? 'header-shrunk' : 'header-full'}`}>
           <div className="header-content">
             <img
               className="logo"

@@ -8,8 +8,8 @@ function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<IRecipe | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,8 +63,6 @@ function App() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedRecipe(null);
-    navigate('/');
   };
 
   return (
@@ -73,7 +71,7 @@ function App() {
         <div className="navbar">
           <nav>
             <ul>
-            <li><NavLink to={`/`}>Accueil</NavLink></li>
+              <li><NavLink to={`/`}>Accueil</NavLink></li>
               {recipes.map((recipe) => (
                 <li key={recipe.id}>
                   <NavLink

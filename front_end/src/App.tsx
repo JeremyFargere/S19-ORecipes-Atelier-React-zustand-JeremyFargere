@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
 import { IRecipe } from './@types/recipe'
 import './App.css'
 
@@ -46,10 +47,10 @@ function App() {
         {isNavOpen && (
           <div className="navbar">
             <nav onClick={toggleNav}>
-              <h2>Accueil</h2>
+            <h2>Accueil</h2>
               <ul>
                 {recipes.map((recipe) => (
-                  <li key={recipe.id}><a href={`#${recipe.slug}`}>{recipe.title}</a></li>
+                  <li key={recipe.id}><Link href={`#${recipe.slug}`}>{recipe.title}</Link></li>
                 ))}
               </ul>
             </nav>

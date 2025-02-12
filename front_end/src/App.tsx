@@ -1,18 +1,40 @@
 import { useState, useEffect } from 'react'
+import { IRecipe } from './@types/recipe'
 import './App.css'
 
 function App() {
+  // État pour gérer l'ouverture de la navigation
   const [isNavOpen, setIsNavOpen] = useState(false)
+  // État pour stocker les recettes
+  const [recipes, setRecipes] = useState<IRecipe[]>([])
+  // État pour gérer le chargement des données
+  const [loading, setLoading] = useState(true)
 
-  // Ferme la navbar après 10 s d'ouverture
+  // Utilisation de useEffect pour récupérer les recettes à partir de l'API
+  useEffect(() => {
+    async function fetchRecipes() {
+      try {
+        const response = await fetch('https://orecipesapi.onrender.com/api/recipes')
+        const data = await response.json()
+        setRecipes(data)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchRecipes()
+  }, [])
+
+  // Ferme automatiquement la nav après 10s
   useEffect(() => {
     if (isNavOpen) {
-      const timer = setTimeout(() => setIsNavOpen(false), 50000)
+      const timer = setTimeout(() => setIsNavOpen(false), 30000)
       return () => clearTimeout(timer)
     }
   }, [isNavOpen])
 
-  // Bascule l'état ouvert/fermé au clic
+  // Bascule l'état ouvert/fermé de la navigation
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen)
   }
@@ -20,27 +42,25 @@ function App() {
   return (
     <>
       <div className="body">
-        {/* Affiche la navbar seulement quand isNavOpen est true */}
+        {/* Navbar conditionnelle */}
         {isNavOpen && (
           <div className="navbar">
             <nav onClick={toggleNav}>
               <h2>Accueil</h2>
               <ul>
-                <li><a href="#cookies">Cookies au beurre de cacahuète</a></li>
-                <li><a href="#macaron">Macaron framboisier</a></li>
-                <li><a href="#tarte-citron">Tarte au citron meringuée</a></li>
-                <li><a href="#amandier">Amandier</a></li>
-                <li><a href="#fondant-chocolat">Fondant au chocolat sans gluten</a></li>
-                <li><a href="#tarte-banoffe">Tarte banoffe</a></li>
+                {recipes.map((recipe) => (
+                  <li key={recipe.id}><a href={`#${recipe.slug}`}>{recipe.title}</a></li>
+                ))}
               </ul>
             </nav>
           </div>
         )}
+
         <div className={`header ${isNavOpen ? 'header-shrunk' : 'header-full'}`}>
           <div className="header-content">
             <img
               className="logo"
-              src="../public/img/logo.png"
+              src="/img/logo.png"
               alt="Logo"
               onClick={toggleNav}
               style={{ cursor: 'pointer' }}
@@ -54,19 +74,22 @@ function App() {
 
           <h1>Les recettes oRecipes</h1>
           <div className="recipe-content">
-            {[...Array(6)].map((_, index) => (
-            <div key={index} className={`recipe-card ${isNavOpen ? 'nav-active' : ''}`}>
-              <img className="recipe-image" src="../public/img/th.jpg" alt="Recette" />
-              <h3 className="recipe-title">Titre de la recette</h3>
-              <p className="recipe-difficulty">Difficulté: Facile</p>
-              <button className="recipe-button">Voir la recette</button>
-            </div>
+            {/* Affiche un message de chargement si les données sont en cours de récupération */}
+            {loading && <p>Chargement...</p>}
+            {/* Affiche les recettes une fois les données récupérées */}
+            {!loading && recipes.map((recipe) => (
+              <div key={recipe.id} className={`recipe-card ${isNavOpen ? 'nav-active' : ''}`}>
+                <img className="recipe-image" src={recipe.thumbnail} alt={recipe.title} />
+                <h3 className="recipe-title">{recipe.title}</h3>
+                <p className="recipe-difficulty">Difficulté: {recipe.difficulty}</p>
+                <button className="recipe-button">Voir la recette</button>
+              </div>
             ))}
-            </div>
+          </div>
         </div>
       </div>
     </>
   )
 }
 
-export default App;
+export default App

@@ -51,13 +51,18 @@ function App() {
               <button type="submit">OK</button>
             </form>
           </div>
+
           <h1>Les recettes oRecipes</h1>
-          <div className="recipe-card">
-          <img className="recipe-image" src="https://via.placeholder.com/150" alt="Recette" />
-          <h3 className="recipe-title">Titre de la recette</h3>
-          <p className="recipe-difficulty">Difficulté: Facile</p>
-          <button className="recipe-button">Voir la recette</button>
-        </div>
+          <div className="recipe-content">
+            {[...Array(6)].map((_, index) => (
+            <div key={index} className="recipe-card">
+              <img className="recipe-image" src="../public/img/th.jpg" alt="Recette" />
+              <h3 className="recipe-title">Titre de la recette</h3>
+              <p className="recipe-difficulty">Difficulté: Facile</p>
+              <button className="recipe-button">Voir la recette</button>
+            </div>
+            ))}
+            </div>
         </div>
       </div>
     </>

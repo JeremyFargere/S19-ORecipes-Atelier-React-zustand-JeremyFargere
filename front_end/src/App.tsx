@@ -55,7 +55,7 @@ function App() {
           <h1>Les recettes oRecipes</h1>
           <div className="recipe-content">
             {[...Array(6)].map((_, index) => (
-            <div key={index} className="recipe-card">
+            <div key={index} className={`recipe-card ${isNavOpen ? 'nav-active' : ''}`}>
               <img className="recipe-image" src="../public/img/th.jpg" alt="Recette" />
               <h3 className="recipe-title">Titre de la recette</h3>
               <p className="recipe-difficulty">Difficulté: Facile</p>

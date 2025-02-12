@@ -126,6 +126,11 @@
   color: #1D91DE;
 }
 
+.recipe-card.nav-active {
+  width: 35%;
+  color: #fff;
+}
+
 .recipe-content {
   display: flex;
   flex-wrap: wrap;

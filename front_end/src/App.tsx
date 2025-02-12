@@ -42,15 +42,15 @@ function App() {
 
   return (
     <>
-      <div className="body">
+      <div className={`body ${isNavOpen ? 'nav-active' : ''}`}>
         {/* Navbar conditionnelle */}
         {isNavOpen && (
           <div className="navbar">
             <nav onClick={toggleNav}>
-            <h2>Accueil</h2>
+              <h2>Accueil</h2>
               <ul>
                 {recipes.map((recipe) => (
-                  <li key={recipe.id}><Link href={`#${recipe.slug}`}>{recipe.title}</Link></li>
+                  <li key={recipe.id}><Link to={`#${recipe.slug}`}>{recipe.title}</Link></li>
                 ))}
               </ul>
             </nav>

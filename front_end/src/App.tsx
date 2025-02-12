@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { IRecipe } from './@types/recipe';
 import './App.css';
 import RecipeDetail from './components/RecipeDetail';
-import Modal from './components/Modal';
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -32,7 +31,7 @@ function App() {
 
   useEffect(() => {
     if (isNavOpen) {
-      const timer = setTimeout(() => setIsNavOpen(false), 60000);
+      const timer = setTimeout(() => setIsNavOpen(false), 120000);
       return () => clearTimeout(timer);
     }
   }, [isNavOpen]);
@@ -73,10 +72,17 @@ function App() {
       {isNavOpen && (
         <div className="navbar">
           <nav>
-            <h2>Accueil</h2>
             <ul>
+            <li><NavLink to={`/`}>Accueil</NavLink></li>
               {recipes.map((recipe) => (
-                <li key={recipe.id}><Link to={`/recipe/${recipe.slug}`}>{recipe.title}</Link></li>
+                <li key={recipe.id}>
+                  <NavLink
+                    to={`/recipe/${recipe.slug}`}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
+                  >
+                    {recipe.title}
+                  </NavLink>
+                </li>
               ))}
             </ul>
           </nav>

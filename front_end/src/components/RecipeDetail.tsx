@@ -34,16 +34,17 @@ const RecipeDetail = () => {
   return (
     <div className="recipe-detail">
         <div className="recipe-detail_header">
-      <h2>{recipe.title}</h2>
       <img src={recipe.thumbnail} alt={recipe.title} />
+      <h2>{recipe.title}</h2>
         </div>
       <p>{recipe.description}</p>
-      <h3>Ingrédients</h3>
+      <div className="recipe-detail_meta">
       <ul>
         {recipe.ingredients.map((ingredient) => (
-          <li key={ingredient.id}>{ingredient.quantity} {ingredient.unit} {ingredient.name}</li>
+          <li className="quantityIngredient" key={ingredient.id}><span>{ingredient.quantity} {ingredient.unit}</span> {ingredient.name}</li>
         ))}
       </ul>
+        </div>
       <h3>Instructions</h3>
       <ol>
         {recipe.instructions.map((instruction, index) => (

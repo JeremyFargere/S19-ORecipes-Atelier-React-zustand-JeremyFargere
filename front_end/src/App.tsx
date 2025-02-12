@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { IRecipe } from './@types/recipe';
 import './App.css';
 import RecipeDetail from './components/RecipeDetail';
@@ -13,6 +13,7 @@ function App() {
   const [selectedRecipe, setSelectedRecipe] = useState<IRecipe | null>(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     async function fetchRecipes() {
@@ -31,30 +32,47 @@ function App() {
 
   useEffect(() => {
     if (isNavOpen) {
-      const timer = setTimeout(() => setIsNavOpen(false), 10000);
+      const timer = setTimeout(() => setIsNavOpen(false), 60000);
       return () => clearTimeout(timer);
     }
   }, [isNavOpen]);
 
+  useEffect(() => {
+    if (location.pathname.startsWith('/recipe/')) {
+      const slug = location.pathname.split('/recipe/')[1];
+      const recipe = recipes.find((r) => r.slug === slug);
+      if (recipe) {
+        setSelectedRecipe(recipe);
+        setIsModalOpen(true);
+      }
+    } else {
+      setIsModalOpen(false);
+      setSelectedRecipe(null);
+    }
+  }, [location, recipes]);
+
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
+    navigate('/');
   };
 
   const openModal = (recipe: IRecipe) => {
     setSelectedRecipe(recipe);
     setIsModalOpen(true);
+    navigate(`/recipe/${recipe.slug}`);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedRecipe(null);
+    navigate('/');
   };
 
   return (
     <div className={`body ${isNavOpen ? 'nav-active' : ''}`}>
       {isNavOpen && (
         <div className="navbar">
-          <nav onClick={toggleNav}>
+          <nav>
             <h2>Accueil</h2>
             <ul>
               {recipes.map((recipe) => (
@@ -81,7 +99,7 @@ function App() {
           </form>
         </div>
 
-        <h1>Les recettes oRecipes</h1>
+        {location.pathname === '/' && <h1>Les recettes oRecipes</h1>}
         <div className="recipe-content">
           <Routes>
             <Route path="/" element={
@@ -101,28 +119,6 @@ function App() {
           </Routes>
         </div>
       </div>
-
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        {selectedRecipe && (
-          <div className="recipe-detail">
-            <h2>{selectedRecipe.title}</h2>
-            <img src={selectedRecipe.thumbnail} alt={selectedRecipe.title} />
-            <p>{selectedRecipe.description}</p>
-            <h3>Ingrédients</h3>
-            <ul>
-              {selectedRecipe.ingredients.map((ingredient) => (
-                <li key={ingredient.id}>{ingredient.quantity} {ingredient.unit} {ingredient.name}</li>
-              ))}
-            </ul>
-            <h3>Instructions</h3>
-            <ol>
-              {selectedRecipe.instructions.map((instruction, index) => (
-                <li key={index}>{instruction}</li>
-              ))}
-            </ol>
-          </div>
-        )}
-      </Modal>
     </div>
   );
 }

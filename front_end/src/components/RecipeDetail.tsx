@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IRecipe } from '../@types/recipe';
+import '../App.css';
 
 const RecipeDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -32,8 +33,10 @@ const RecipeDetail = () => {
 
   return (
     <div className="recipe-detail">
+        <div className="recipe-detail_header">
       <h2>{recipe.title}</h2>
       <img src={recipe.thumbnail} alt={recipe.title} />
+        </div>
       <p>{recipe.description}</p>
       <h3>Ingrédients</h3>
       <ul>
